@@ -8,6 +8,7 @@ class JetCommandRunner extends CommandRunner<int> {
       negatable: false,
       help: 'Print the current version.',
     );
+
     addCommand(FeatureCommand());
   }
 }

@@ -1,0 +1,13 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "feature test",
+      "request": "launch",
+      "type": "dart",
+      "program": "bin/jet_cli.dart",
+      "args": ["feature", "invoice"],
+      "console": "terminal"
+    }
+  ]
+}

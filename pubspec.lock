@@ -120,6 +120,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "1.0.3"
+  jinja:
+    dependency: "direct main"
+    description:
+      name: jinja
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "0.4.0-dev.12"
   js:
     dependency: transitive
     description:
@@ -197,6 +204,20 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "2.1.0"
+  quiver:
+    dependency: transitive
+    description:
+      name: quiver
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "3.0.1"
+  recase:
+    dependency: "direct main"
+    description:
+      name: recase
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "4.0.0"
   shelf:
     dependency: transitive
     description:
@@ -295,6 +316,13 @@ packages:
       url: "https://pub.dartlang.org"
     source: hosted
     version: "0.4.5"
+  textwrap:
+    dependency: transitive
+    description:
+      name: textwrap
+      url: "https://pub.dartlang.org"
+    source: hosted
+    version: "1.0.2"
   typed_data:
     dependency: transitive
     description:

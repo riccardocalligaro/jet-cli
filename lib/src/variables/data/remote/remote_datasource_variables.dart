@@ -1,0 +1,3 @@
+class RemoteDatasourceVariables {
+  String? name;
+}
