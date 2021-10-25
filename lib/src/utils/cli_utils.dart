@@ -19,15 +19,42 @@ Timer loadingAnimation({
 
 void buildMessage(String message) => stdout.writeln('🔨 $message');
 
-String stringQuestion(String question) {
+String multilineInput(String question) {
   stdout.write('${"\t" * cli.currentLevel}❓ $question: ');
-  String input = '';
-  while (input.isEmpty) {
+
+  final lines = [];
+
+  String input;
+  while (true) {
+    input = stdin.readLineSync() ?? '';
+    if (input.isNotEmpty) {
+      lines.add(input);
+    } else {
+      break;
+    }
+  }
+
+  return lines.join('\n');
+}
+
+String stringQuestion(String question, {String? defaultChoice}) {
+  stdout.write('${"\t" * cli.currentLevel}❓ $question: ');
+  if (defaultChoice != null) {
+    stdout.write('[$defaultChoice] ');
+  }
+
+  String input = defaultChoice != null ? '\n' : '';
+  while ((input == '\n' && defaultChoice != null) ||
+      (input.isEmpty && defaultChoice == null)) {
     input = stdin.readLineSync() ?? '';
     stdout.write('\n');
   }
 
   if (cli.currentLevel > 0) cli.currentLevel--;
+
+  if (input == '' && defaultChoice != null) {
+    return defaultChoice;
+  }
 
   return input;
 }
@@ -35,15 +62,17 @@ String stringQuestion(String question) {
 bool boolQuestion(String message, {String? prefix}) {
   String input = '';
 
-  while (input.isEmpty || (input != 'y' && input != 'n')) {
-    stdout.write('${prefix ?? "❓"} $message [y][n]: ');
+  while (input.isEmpty ||
+      (input.toLowerCase() != 'y' && input.toLowerCase() != 'n')) {
+    stdout
+        .write('${"\t" * cli.currentLevel}${prefix ?? "❓"} $message [y][n]: ');
     stdin.lineMode = false;
     input = utf8.decode([stdin.readByteSync()]);
     stdin.lineMode = true;
     stdout.write('\n');
   }
 
-  return input == 'y';
+  return input.toLowerCase() == 'y';
 }
 
 String plural(String featureName) {
@@ -54,6 +83,10 @@ String plural(String featureName) {
     cli.currentLevel++;
     return stringQuestion('Enter the correct name: ');
   }
+}
+
+void finished() {
+  stdout.writeln('👌 Finished');
 }
 
 void generated(String name) {

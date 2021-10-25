@@ -1,0 +1,40 @@
+{% block content -%}
+
+import 'package:dio/dio.dart';
+
+{{imports}}
+
+/// [{{pluralName}}RemoteDataSource]: Class that handles the remote calls for the {{featureName}} feature
+{% if path != '' %}
+/// - `baseUrl{{path}}` Gets the {{pluralNameLowercase}}
+{% endif %}
+class {{pluralName}}RemoteDatasource {
+  
+  final Dio client;
+
+  {{pluralName}}RemoteDatasource({
+    required this.client,
+  });
+
+  Future<{{'' if responseSingleObject else 'List<'}}{{remoteModel}}{{'' if responseSingleObject else '>'}}> get{{pluralName}}() async {
+  
+    final response = await client.get('{{path}}');
+
+    {% if generate %}
+    {% if responseSingleObject %}
+    return {{remoteModel}}.fromJson(response.data);
+    {% endif %}
+    {% if responseSingleObject == false %}
+    List<{{remoteModel}}> {{pluralNameLowercase}} = List<{{remoteModel}}>.from(
+      response.data.map(
+        (i) => {{remoteModel}}.fromJson(i),
+      ),
+    );
+
+    return {{pluralNameLowercase}};
+    {% endif %}    
+    {% endif %}
+  }
+}
+
+{% endblock -%}

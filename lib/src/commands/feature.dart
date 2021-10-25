@@ -3,12 +3,12 @@ import 'dart:async';
 import 'package:args/command_runner.dart';
 import 'package:jet_cli/src/builders/data/remote/remote_datasource_builder.dart';
 import 'package:jet_cli/src/builders/data/remote/remote_model_builder.dart';
-import 'package:jet_cli/src/utils/cli_utils.dart';
-import 'package:jet_cli/src/variables/feature_variables.dart';
-import 'package:jinja/jinja.dart';
-import 'package:jinja/loaders.dart';
-import 'package:universal_io/io.dart';
+import 'package:jet_cli/src/builders/data/repository/repository_impl_builder.dart';
 import 'package:jet_cli/src/extensions/extensions.dart';
+import 'package:jet_cli/src/utils/cli_utils.dart';
+import 'package:jet_cli/src/variables/data/remote/remote_datasource_variables.dart';
+import 'package:jet_cli/src/variables/data/remote/remote_model_variables.dart';
+import 'package:jet_cli/src/variables/feature_variables.dart';
 import 'package:recase/recase.dart';
 
 class FeatureCommand extends Command<int> {
@@ -29,12 +29,13 @@ class FeatureCommand extends Command<int> {
   Future<int> run() async {
     _validateFeatureName(argResults?.rest ?? []);
 
+    // check if feature already exists
+
     final featureName = argResults!.rest[0].camelCase;
 
     final featureVariables = FeatureVariables();
 
     featureVariables.featureNameCapitalized = featureName.capitalized;
-    featureVariables.featureName = featureName;
 
     featureVariables.singularNameForModel = featureName.capitalized;
     featureVariables.singularNameLowercase = featureName;
@@ -44,35 +45,51 @@ class FeatureCommand extends Command<int> {
 
     // get the correct plural name
     final pluralName = plural(featureName).camelCase;
-
+    featureVariables.featureName = pluralName;
     featureVariables.pluralName = pluralName.capitalized;
     featureVariables.pluralNameLowercase = pluralName;
 
     okContinue('singular $featureName, plural: $pluralName');
 
-    if (boolQuestion('Generate remote model?', prefix: '\n🌐')) {
-      final remoteModelVariables = RemoteModelBuilder.build(featureVariables);
+    featureVariables.hasDomainLayer = boolQuestion('Has domain layer? ');
+    featureVariables.responseSingleObject =
+        boolQuestion('Is response a single object?');
+
+    if (featureVariables.responseSingleObject!) {
+      featureVariables.modelNameLowercase =
+          featureVariables.singularNameLowercase;
+      featureVariables.modelNameCapitalized =
+          featureVariables.singularNameForModel;
+    } else {
+      featureVariables.modelNameLowercase =
+          featureVariables.pluralNameLowercase;
+      featureVariables.modelNameCapitalized = featureVariables.pluralName;
     }
+
+    print(featureVariables.toMap().toString());
+
+    RemoteModelVariables? remoteModelVariables;
+
+    if (boolQuestion('Generate remote model?', prefix: '\n🌐')) {
+      remoteModelVariables = RemoteModelBuilder.build(featureVariables);
+    }
+    RemoteDatasourceVariables? remoteDatasourceVariables;
 
     if (boolQuestion('Generate remote datasource?', prefix: '\n🌐')) {
-      final remoteModelVariables =
-          RemoteDatasourceBuilder.build(featureVariables);
+      remoteDatasourceVariables = RemoteDatasourceBuilder.build(
+        featureVariables,
+        remoteModelVariables: remoteModelVariables,
+      );
     }
 
-    var path = Platform.script.resolve('templates').toFilePath();
+    if (boolQuestion('Generate repository? ', prefix: '\n📁')) {
+      final repositoryImplVariables = RepositoryImplBuilder.build(
+        featureVariables,
+        remoteDatasourceVariables: remoteDatasourceVariables,
+      );
+    }
 
-    final env = Environment(
-      loader: FileSystemLoader(path: path),
-      leftStripBlocks: true,
-      trimBlocks: true,
-    );
-
-    final template = env
-        .getTemplate('feature/data/remote/{{ feature }}_remote_datasource.jet');
-
-    // String pluralName = '${featureName}s';
-
-    //print(template.render(variables));
+    //await Process.run('flutter', ['format', 'output']);
 
     return 0;
   }

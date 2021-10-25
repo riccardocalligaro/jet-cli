@@ -1,5 +1,6 @@
 import 'package:args/command_runner.dart';
 import 'package:jet_cli/src/commands/feature.dart';
+import 'package:jet_cli/src/commands/model.dart';
 
 class JetCommandRunner extends CommandRunner<int> {
   JetCommandRunner() : super('jet', '🚀 A super fast and easy CLI') {
@@ -10,5 +11,6 @@ class JetCommandRunner extends CommandRunner<int> {
     );
 
     addCommand(FeatureCommand());
+    addCommand(ModelCommand());
   }
 }

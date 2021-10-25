@@ -1,0 +1,36 @@
+{% block content -%}
+import 'package:dartz/dartz.dart';
+{{imports}}
+{% if hasDomainLayer %}
+class {{ repositoryName }} implements {{ abstractRepositoryName }} {
+{% else %}
+class {{ abstractRepositoryName }} {
+{% endif %}
+
+  final {{pluralName}}RemoteDatasource {{pluralNameLowercase}}RemoteDatasource;
+
+  {{ repositoryName }}({
+    required this.{{pluralNameLowercase}}RemoteDatasource,
+  });
+
+  Future<Either<Failure, {{returnModel}}>> get{{modelNameCapitalized}}() {
+    try {
+      final remote{{modelNameCapitalized}} =
+          await {{modelNameLowercase}}RemoteDatasource.get{{modelNameCapitalized}}();
+
+      {% if hasDomainLayer %}
+      final domain{{modelNameCapitalized}} = remote{{modelNameCapitalized}}
+          .map((r) => {{singularNameForModel}}DomainModel.fromRemoteModel(r))
+          .toList();  
+
+      return Right(domain{{modelNameCapitalized}});
+      {% else %}
+      return Right(remote{{modelNameCapitalized}});
+      {% endif %}
+    } catch (e, s) {
+      return Left(handleError(e, s));
+    }
+  };
+}
+
+{% endblock -%}

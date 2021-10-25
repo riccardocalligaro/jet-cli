@@ -3,6 +3,7 @@ import 'dart:io';
 import 'cli_utils.dart';
 
 saveGeneratedContent(String file, String content) {
+  // we need to find the appropriate directory to output the files
   final createdFile = File('output/$file');
   createdFile.createSync(recursive: true);
   createdFile.writeAsStringSync(content);
@@ -10,7 +11,11 @@ saveGeneratedContent(String file, String content) {
   generated(createdFile.path);
 }
 
-renamedFile(String file, String newName) {
+renamedFileWithPackage(String file) {
+  return file;
+}
+
+renamedFile(String file, String newName, String featureName) {
   return file
       .replaceAll(
         '{{name}}',
@@ -20,5 +25,6 @@ renamedFile(String file, String newName) {
         '.jet',
         '.dart',
       )
+      .replaceAll('feature', featureName)
       .toLowerCase();
 }

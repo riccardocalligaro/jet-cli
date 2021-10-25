@@ -1,0 +1,10 @@
+{% block content -%}
+import 'package:dartz/dartz.dart';
+
+{{imports}}
+
+class {{ repositoryName }} extends {{ abstractRepositoryName }} {
+  Future<Either<Failure, {{returnType}}>> get{{pluralName}}();
+}
+
+{% endblock -%}
