@@ -17,6 +17,14 @@ class FeatureVariables {
   String? modelNameLowercase;
   String? modelNameCapitalized;
 
+  String? repositoryFilename;
+  String? repositoryImplFilename;
+
+  String? remoteModelFilename;
+  String? remoteDatasourceFilename;
+  String? domainModelFilename;
+
+  String? packageName;
   FeatureVariables({
     this.featureName,
     this.singularNameForModel,
@@ -28,6 +36,12 @@ class FeatureVariables {
     this.responseSingleObject,
     this.modelNameLowercase,
     this.modelNameCapitalized,
+    this.repositoryFilename,
+    this.remoteModelFilename,
+    this.remoteDatasourceFilename,
+    this.domainModelFilename,
+    this.repositoryImplFilename,
+    this.packageName,
   });
 
   Map<String, dynamic> toMap() {

@@ -1,6 +1,7 @@
 {% block content -%}
 import 'package:dartz/dartz.dart';
 {{imports}}
+
 {% if hasDomainLayer %}
 class {{ repositoryName }} implements {{ abstractRepositoryName }} {
 {% else %}
@@ -30,7 +31,7 @@ class {{ abstractRepositoryName }} {
     } catch (e, s) {
       return Left(handleError(e, s));
     }
-  };
+  }
 }
 
 {% endblock -%}

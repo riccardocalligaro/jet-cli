@@ -4,12 +4,17 @@ import 'package:args/command_runner.dart';
 import 'package:jet_cli/src/builders/data/remote/remote_datasource_builder.dart';
 import 'package:jet_cli/src/builders/data/remote/remote_model_builder.dart';
 import 'package:jet_cli/src/builders/data/repository/repository_impl_builder.dart';
+import 'package:jet_cli/src/builders/domain/model/domain_model_builder.dart';
+import 'package:jet_cli/src/builders/domain/repository/repository_builder.dart';
 import 'package:jet_cli/src/extensions/extensions.dart';
 import 'package:jet_cli/src/utils/cli_utils.dart';
+import 'package:jet_cli/src/utils/file_utils.dart';
 import 'package:jet_cli/src/variables/data/remote/remote_datasource_variables.dart';
 import 'package:jet_cli/src/variables/data/remote/remote_model_variables.dart';
 import 'package:jet_cli/src/variables/feature_variables.dart';
 import 'package:recase/recase.dart';
+import 'package:universal_io/prefer_universal/io.dart';
+import 'package:yaml/yaml.dart';
 
 class FeatureCommand extends Command<int> {
   FeatureCommand() {
@@ -30,6 +35,8 @@ class FeatureCommand extends Command<int> {
     _validateFeatureName(argResults?.rest ?? []);
 
     // check if feature already exists
+
+    final config = loadConfig();
 
     final featureName = argResults!.rest[0].camelCase;
 
@@ -55,6 +62,12 @@ class FeatureCommand extends Command<int> {
     featureVariables.responseSingleObject =
         boolQuestion('Is response a single object?');
 
+    if (config['package_name'] == null) {
+      featureVariables.packageName = stringQuestion('Package name');
+    } else {
+      featureVariables.packageName = config['package_name'];
+    }
+
     if (featureVariables.responseSingleObject!) {
       featureVariables.modelNameLowercase =
           featureVariables.singularNameLowercase;
@@ -66,12 +79,11 @@ class FeatureCommand extends Command<int> {
       featureVariables.modelNameCapitalized = featureVariables.pluralName;
     }
 
-    print(featureVariables.toMap().toString());
-
     RemoteModelVariables? remoteModelVariables;
 
     if (boolQuestion('Generate remote model?', prefix: '\n🌐')) {
       remoteModelVariables = RemoteModelBuilder.build(featureVariables);
+      featureVariables.remoteModelFilename = remoteModelVariables.filename;
     }
     RemoteDatasourceVariables? remoteDatasourceVariables;
 
@@ -80,13 +92,34 @@ class FeatureCommand extends Command<int> {
         featureVariables,
         remoteModelVariables: remoteModelVariables,
       );
+
+      featureVariables.remoteDatasourceFilename =
+          remoteDatasourceVariables.filename;
     }
 
     if (boolQuestion('Generate repository? ', prefix: '\n📁')) {
+      if (featureVariables.hasDomainLayer ?? false) {
+        final domainModelVariables = DomainModelBuilder.build(
+          featureVariables,
+          remoteModelVariables,
+        );
+
+        featureVariables.domainModelFilename = domainModelVariables.filename;
+
+        final repositoryVariables = RepositoryBuilder.build(
+          featureVariables,
+        );
+
+        featureVariables.repositoryFilename = repositoryVariables.filename;
+      }
+
       final repositoryImplVariables = RepositoryImplBuilder.build(
         featureVariables,
         remoteDatasourceVariables: remoteDatasourceVariables,
       );
+
+      featureVariables.repositoryImplFilename =
+          repositoryImplVariables.filename;
     }
 
     //await Process.run('flutter', ['format', 'output']);

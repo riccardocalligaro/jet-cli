@@ -52,8 +52,7 @@ class RemoteDatasourceBuilder {
           .render(variables.toMap(featureVariables)),
     );
 
-    variables.filename =
-        renamedFileWithPackage(renamedFileWithPackage(renamedFileForContent));
+    variables.filename = renamedFileForContent;
 
     return variables;
   }

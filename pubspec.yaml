@@ -15,3 +15,4 @@ dependencies:
   jinja: ^0.4.0-dev.12
   recase: ^4.0.0
   universal_io: ^2.0.4
+  yaml: ^3.1.0

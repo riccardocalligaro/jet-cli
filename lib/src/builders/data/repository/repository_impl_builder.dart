@@ -1,4 +1,5 @@
 import 'package:jet_cli/src/renderer/renderer.dart';
+import 'package:jet_cli/src/utils/builder_utils.dart';
 import 'package:jet_cli/src/utils/file_utils.dart';
 import 'package:jet_cli/src/variables/data/remote/remote_datasource_variables.dart';
 import 'package:jet_cli/src/variables/data/repository/repository_impl_variables.dart';
@@ -17,9 +18,23 @@ class RepositoryImplBuilder {
     variables.abstractRepositoryName =
         '${featureVariables.pluralName}Repository';
 
+    variables.imports = importFilenames(
+      [
+        featureVariables.hasDomainLayer!
+            ? featureVariables.domainModelFilename
+            : '',
+        featureVariables.remoteModelFilename,
+        featureVariables.remoteDatasourceFilename,
+        featureVariables.hasDomainLayer!
+            ? featureVariables.repositoryFilename
+            : '',
+      ],
+      featureVariables.packageName!,
+    );
+
     final renamed = renamedFile(
       repositoryImplFileName,
-      featureVariables.singularNameLowercase!,
+      featureVariables.pluralName!,
       featureVariables.featureName!,
     );
 

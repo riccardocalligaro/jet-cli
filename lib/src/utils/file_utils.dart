@@ -1,6 +1,15 @@
 import 'dart:io';
 
+import 'package:yaml/yaml.dart';
+
 import 'cli_utils.dart';
+
+loadConfig() {
+  File file = File('jet.yaml');
+  String yamlString = file.readAsStringSync();
+  Map yaml = loadYaml(yamlString);
+  return yaml;
+}
 
 saveGeneratedContent(String file, String content) {
   // we need to find the appropriate directory to output the files

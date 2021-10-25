@@ -3,16 +3,19 @@ import 'dart:convert';
 class RemoteModelVariables {
   String? name;
   String? filename;
+  String? content;
 
   RemoteModelVariables({
     this.name,
     this.filename,
+    this.content,
   });
 
   Map<String, dynamic> toMap() {
     return {
       'name': name,
       'filename': filename,
+      'content': content,
     };
   }
 
