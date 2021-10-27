@@ -21,6 +21,8 @@ String modelFromJsonModel(JsonModel data, {bool isNested = false}) =>
       enums: data.enums,
       enumConverters: data.enumConverters,
       nestedClasses: data.nestedClasses,
+      remoteModelName: data.remoteModelName,
+      toDomainModel: data.toDomainModel,
     );
 
 String _defaultJsonTemplate({
@@ -36,6 +38,8 @@ String _defaultJsonTemplate({
   required String copyWith,
   required String cloneFunction,
   required String jsonFunctions,
+  String? toDomainModel,
+  String? remoteModelName,
   String? relativePath,
   String? enums,
   String? enumConverters,
@@ -55,8 +59,6 @@ String _defaultJsonTemplate({
   if (!isNested) {
     template += '''
 import 'package:flutter/foundation.dart';
-import 'package:quiver/core.dart';
-import '${indexPathPrefix}index.dart';
 
 $imports
 
@@ -70,6 +72,8 @@ class $className${extendsClass != null ? ' extends $extendsClass ' : ''}${mixinC
 $constructor
 
   $declaration
+
+  ${toDomainModel ?? ""}
 
 $jsonFunctions
 

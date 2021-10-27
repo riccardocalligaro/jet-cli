@@ -15,6 +15,7 @@ class JsonModelGenerator {
       relativePath: null,
       packageName: '',
       indexPath: '',
+      remoteModelName: options.remoteModel,
     );
 
     final model = modelFromJsonModel(jsonModel);

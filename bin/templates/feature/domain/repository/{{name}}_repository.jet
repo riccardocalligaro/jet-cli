@@ -3,7 +3,7 @@ import 'package:dartz/dartz.dart';
 
 {{imports}}
 
-class {{ abstractRepositoryName }} {
+mixin {{ abstractRepositoryName }} {
   Future<Either<Failure, {{returnModel}}>> get{{modelNameCapitalized}}();
 }
 

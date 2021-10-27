@@ -1,0 +1,35 @@
+{% block content -%}
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:get_it/get_it.dart';
+
+{{containerImports}}
+
+final _sl = GetIt.instance;
+
+class {{modelNameCapitalized}}Container {
+  static Future<void> init() async {
+    _sl.registerLazySingleton(
+      () => {{modelNameCapitalized}}RemoteDatasource(
+        client: _sl(),
+      ),
+    );
+
+    _sl.registerLazySingleton<{{modelNameCapitalized}}Repository>(
+      () => {{modelNameCapitalized}}RepositoryImpl(
+        {{modelNameLowercase}}RemoteDatasource: _sl(),
+      ),
+    );
+  }
+
+  static List<BlocProvider> getBlocProviders() {
+    return [
+      BlocProvider<{{modelNameCapitalized}}Bloc>(
+        create: (context) => {{modelNameCapitalized}}Bloc(
+          {{modelNameLowercase}}Repository: _sl(),
+        ),
+      ),
+    ];
+  }
+}
+
+{% endblock -%}

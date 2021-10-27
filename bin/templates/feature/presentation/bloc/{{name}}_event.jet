@@ -1,0 +1,8 @@
+{% block content -%}
+part of '{{modelNameLowercase}}_bloc.dart';
+
+@immutable
+abstract class {{modelNameCapitalized}}Event {}
+
+class Get{{modelNameCapitalized}} extends {{modelNameCapitalized}}Event {}
+{% endblock -%}

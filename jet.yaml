@@ -1,1 +1,2 @@
-package_name: test_app
+package_name: todos_app
+core_path: core

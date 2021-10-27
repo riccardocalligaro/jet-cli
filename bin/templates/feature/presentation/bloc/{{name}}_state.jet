@@ -1,0 +1,29 @@
+{% block content -%}
+part of '{{modelNameLowercase}}_bloc.dart';
+
+@immutable
+abstract class {{modelNameCapitalized}}State {}
+
+class {{modelNameCapitalized}}Initial extends {{modelNameCapitalized}}State {}
+
+class {{modelNameCapitalized}}Loading extends {{modelNameCapitalized}}State {}
+
+
+class {{modelNameCapitalized}}LoadSuccess extends {{modelNameCapitalized}}State {
+  final {{returnModel}} {{modelNameLowercase}};
+
+  {{modelNameCapitalized}}LoadSuccess({
+    required this.{{modelNameLowercase}},
+  });
+}
+
+class {{modelNameCapitalized}}Failure extends {{modelNameCapitalized}}State {
+  final Failure failure;
+  final {{modelNameCapitalized}}Event event;
+  
+  {{modelNameCapitalized}}Failure({
+    required this.failure,
+    required this.event,
+  });
+}
+{% endblock -%}

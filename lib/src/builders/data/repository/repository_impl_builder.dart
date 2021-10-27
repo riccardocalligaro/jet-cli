@@ -4,6 +4,7 @@ import 'package:jet_cli/src/utils/file_utils.dart';
 import 'package:jet_cli/src/variables/data/remote/remote_datasource_variables.dart';
 import 'package:jet_cli/src/variables/data/repository/repository_impl_variables.dart';
 import 'package:jet_cli/src/variables/feature_variables.dart';
+import 'package:recase/recase.dart';
 
 const String repositoryImplFileName =
     'feature/data/repository/{{name}}_repository_impl.jet';
@@ -38,8 +39,6 @@ class RepositoryImplBuilder {
       featureVariables.featureName!,
     );
 
-    print(variables.toMap(featureVariables));
-
     // save the content to the file
     saveGeneratedContent(
       renamed,
@@ -49,7 +48,12 @@ class RepositoryImplBuilder {
     );
 
     variables.filename = renamed;
-
+    variables.repositoryNameLowercase = featureVariables.hasDomainLayer!
+        ? variables.abstractRepositoryName!.camelCase
+        : variables.repositoryName;
+    variables.usedRepository = featureVariables.hasDomainLayer!
+        ? variables.abstractRepositoryName
+        : variables.repositoryName;
     return variables;
   }
 }

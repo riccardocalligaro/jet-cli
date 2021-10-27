@@ -1,0 +1,36 @@
+{% block content -%}
+
+import 'package:bloc/bloc.dart';
+import 'package:meta/meta.dart';
+
+{{blocImports}}
+
+part '{{modelNameLowercase}}_state.dart';
+part '{{modelNameLowercase}}_event.dart';
+
+
+class {{modelNameCapitalized}}Bloc extends Bloc<{{modelNameCapitalized}}Event, {{modelNameCapitalized}}State> {
+  
+  final {{ usedRepository }} {{ repositoryNameLowercase }}; 
+
+  {{modelNameCapitalized}}Bloc({
+    required this.{{ repositoryNameLowercase }}
+  }) : super({{modelNameCapitalized}}Initial()) {
+    on<Get{{modelNameCapitalized}}>((event, emit) async {
+      emit({{modelNameCapitalized}}Loading());
+
+       final {{modelNameLowercase}}Result = await {{ repositoryNameLowercase }}.get{{modelNameCapitalized}}();
+
+       {{modelNameLowercase}}Result.fold(
+         (failure) {
+           emit({{modelNameCapitalized}}Failure(failure: failure, event: event));
+         },
+         ({{modelNameLowercase}}) {
+            emit({{modelNameCapitalized}}LoadSuccess({{modelNameLowercase}}: {{modelNameLowercase}}));
+         },
+       );
+
+    });
+  }
+}
+{% endblock -%}

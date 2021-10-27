@@ -1,6 +1,5 @@
 import 'package:jet_cli/src/json_to_model/index.dart';
 import 'package:jet_cli/src/json_to_model/models/json_options.dart';
-import 'package:jet_cli/src/utils/cli_utils.dart';
 import 'package:jet_cli/src/utils/file_utils.dart';
 import 'package:jet_cli/src/variables/data/remote/remote_model_variables.dart';
 import 'package:jet_cli/src/variables/domain/model/domain_model_variables.dart';
@@ -26,6 +25,7 @@ class DomainModelBuilder {
     final content = JsonModelGenerator.run(
       JSONOptions(
         name: '${featureVariables.singularNameForModel}DomainModel',
+        remoteModel: remoteModelVariables?.name,
         content: remoteModelVariables!.content!,
       ),
     );

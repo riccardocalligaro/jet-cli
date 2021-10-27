@@ -1,0 +1,30 @@
+{% block content -%}
+import 'package:flutter/material.dart';
+
+{{loadedImports}}
+
+class {{modelNameCapitalized}}Loaded extends StatelessWidget {
+
+  final {{returnModel}} {{modelNameLowercase}};
+
+  const {{modelNameCapitalized}}Loaded({
+    Key? key, 
+    required this.{{modelNameLowercase}},
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    {% if responseSingleObject %}
+    return Container({{modelNameLowercase}}.toString());
+    {% else %}
+    return ListView.builder(
+      itemCount: {{modelNameLowercase}}.length,
+      itemBuilder: (BuildContext context, int index) {
+        final {{singularNameLowercase}} = {{modelNameLowercase}}[index];
+        return Text({{singularNameLowercase}}.toString());
+      },
+    );
+    {% endif %}
+  }
+}
+{% endblock -%}

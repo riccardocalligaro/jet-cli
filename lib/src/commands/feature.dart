@@ -1,20 +1,26 @@
 import 'dart:async';
 
 import 'package:args/command_runner.dart';
+import 'package:jet_cli/src/builders/container_builder.dart';
 import 'package:jet_cli/src/builders/data/remote/remote_datasource_builder.dart';
 import 'package:jet_cli/src/builders/data/remote/remote_model_builder.dart';
 import 'package:jet_cli/src/builders/data/repository/repository_impl_builder.dart';
 import 'package:jet_cli/src/builders/domain/model/domain_model_builder.dart';
 import 'package:jet_cli/src/builders/domain/repository/repository_builder.dart';
+import 'package:jet_cli/src/builders/presentation/bloc/bloc_builder.dart';
+import 'package:jet_cli/src/builders/presentation/page_builder.dart';
 import 'package:jet_cli/src/extensions/extensions.dart';
 import 'package:jet_cli/src/utils/cli_utils.dart';
 import 'package:jet_cli/src/utils/file_utils.dart';
 import 'package:jet_cli/src/variables/data/remote/remote_datasource_variables.dart';
 import 'package:jet_cli/src/variables/data/remote/remote_model_variables.dart';
+import 'package:jet_cli/src/variables/data/repository/repository_impl_variables.dart';
+import 'package:jet_cli/src/variables/domain/model/domain_model_variables.dart';
+import 'package:jet_cli/src/variables/domain/repository/repository_variables.dart';
 import 'package:jet_cli/src/variables/feature_variables.dart';
+import 'package:jet_cli/src/variables/presentation/bloc_variables.dart';
 import 'package:recase/recase.dart';
 import 'package:universal_io/prefer_universal/io.dart';
-import 'package:yaml/yaml.dart';
 
 class FeatureCommand extends Command<int> {
   FeatureCommand() {
@@ -32,6 +38,9 @@ class FeatureCommand extends Command<int> {
 
   @override
   Future<int> run() async {
+    final stopwatch = Stopwatch()..start();
+
+    //stdout.flush();
     _validateFeatureName(argResults?.rest ?? []);
 
     // check if feature already exists
@@ -80,6 +89,10 @@ class FeatureCommand extends Command<int> {
     }
 
     RemoteModelVariables? remoteModelVariables;
+    RepositoryVariables? repositoryVariables;
+    RepositoryImplVariables? repositoryImplVariables;
+    DomainModelVariables? domainModelVariables;
+    BlocVariables? blocVariables;
 
     if (boolQuestion('Generate remote model?', prefix: '\n🌐')) {
       remoteModelVariables = RemoteModelBuilder.build(featureVariables);
@@ -99,21 +112,21 @@ class FeatureCommand extends Command<int> {
 
     if (boolQuestion('Generate repository? ', prefix: '\n📁')) {
       if (featureVariables.hasDomainLayer ?? false) {
-        final domainModelVariables = DomainModelBuilder.build(
+        domainModelVariables = DomainModelBuilder.build(
           featureVariables,
           remoteModelVariables,
         );
 
         featureVariables.domainModelFilename = domainModelVariables.filename;
 
-        final repositoryVariables = RepositoryBuilder.build(
+        repositoryVariables = RepositoryBuilder.build(
           featureVariables,
         );
 
         featureVariables.repositoryFilename = repositoryVariables.filename;
       }
 
-      final repositoryImplVariables = RepositoryImplBuilder.build(
+      repositoryImplVariables = RepositoryImplBuilder.build(
         featureVariables,
         remoteDatasourceVariables: remoteDatasourceVariables,
       );
@@ -122,8 +135,34 @@ class FeatureCommand extends Command<int> {
           repositoryImplVariables.filename;
     }
 
-    //await Process.run('flutter', ['format', 'output']);
+    if (boolQuestion('Generate BloC? ', prefix: '\n🌊')) {
+      blocVariables = BlocBuilder.build(
+        featureVariables,
+        repositoryImplVariables: repositoryImplVariables,
+        repositoryVariables: repositoryVariables,
+      );
+    }
 
+    if (boolQuestion('Generate page presentation?', prefix: '\n🌇')) {
+      PageBuilder.build(
+        featureVariables,
+        blocVariables: blocVariables,
+        domainModelVariables: domainModelVariables,
+      );
+    }
+
+    if (boolQuestion('Generate container?', prefix: '\n📦')) {
+      ContainerBuilder.build(
+        featureVariables,
+      );
+    }
+
+    await Process.run('cd', ['outout']);
+    await Process.run('flutter', ['format', '.']);
+
+    stdout.write('\n');
+    finished(duration: stopwatch.elapsed);
+    stopwatch.stop();
     return 0;
   }
 

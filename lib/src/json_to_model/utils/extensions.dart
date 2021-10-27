@@ -116,6 +116,22 @@ $constructorDeclarations,
         .indented();
   }
 
+  String toDomainModel(String className, String remoteModel) {
+    final bodyDeclarations = where((e) => e.name != null)
+        .map(
+          (e) => e.domainModelDeclaration(),
+        )
+        .join(',\n')
+        .trim()
+        .indented();
+
+    return 'static $className fromRemoteModel($remoteModel r) {\n'
+        'return $className(\n'
+        '$bodyDeclarations,\n'
+        ');\n'
+        '}';
+  }
+
   String toCopyWith(String className) {
     final constructorDeclarations = toConstructorDeclarations();
     final bodyDeclarations = where((e) => e.name != null)
@@ -128,7 +144,7 @@ $constructorDeclarations,
 
     return '$className copyWith({\n'
             '$constructorDeclarations\n'
-            '}) => $className(\n'
+            ',}) => $className(\n'
             '$bodyDeclarations,\n'
             ');'
         .indented();

@@ -15,6 +15,8 @@ class JsonModel {
   late String hashDeclarations;
   late String equalsDeclarations;
   late String imports;
+  String? remoteModelName;
+  String? toDomainModel;
   String? packageName;
   String? indexPath;
   String? enums;
@@ -30,7 +32,9 @@ class JsonModel {
     this.packageName,
     this.indexPath,
     this.relativePath,
+    this.remoteModelName,
   }) {
+    remoteModelName = remoteModelName;
     className = fileName.toTitleCase();
     constructor = dartDeclarations.toConstructor(className);
     mixinClass = dartDeclarations
@@ -40,8 +44,9 @@ class JsonModel {
         .map((element) => element.mixinClass)
         .join(', ');
     declaration = dartDeclarations.toDeclarationStrings(className);
-    mockDeclaration = dartDeclarations.toMockDeclarationStrings(className);
+    //mockDeclaration = dartDeclarations.toMockDeclarationStrings(className);
     copyWith = dartDeclarations.toCopyWith(className);
+
     cloneFunction = dartDeclarations.toCloneFunction(className);
     jsonFunctions = dartDeclarations.toJsonFunctions(className);
     equalsDeclarations = dartDeclarations.toEqualsDeclarationString();
@@ -50,7 +55,10 @@ class JsonModel {
     enums = dartDeclarations.getEnums(className);
     nestedClasses = dartDeclarations.getNestedModelClasses();
     nestedFactoryClasses = dartDeclarations.getNestedFactoryClasses();
-
+    if ((remoteModelName ?? '').isNotEmpty) {
+      toDomainModel =
+          dartDeclarations.toDomainModel(className, remoteModelName!);
+    }
     final extendsClass = dartDeclarations
         .where((element) => element.extendsClass != null)
         .toList();
@@ -66,6 +74,7 @@ class JsonModel {
     String? packageName,
     String? indexPath,
     String? relativePath,
+    String? remoteModelName,
   }) {
     final dartDeclarations = <DartDeclaration>[];
     jsonMap.forEach((key, value) {
@@ -79,6 +88,7 @@ class JsonModel {
       relativePath: relativePath,
       packageName: packageName,
       indexPath: indexPath,
+      remoteModelName: remoteModelName,
     );
   }
 }

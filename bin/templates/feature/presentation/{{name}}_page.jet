@@ -1,0 +1,42 @@
+{% block content -%}
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+{{imports}}
+
+class {{modelNameCapitalized}}Page extends StatefulWidget {
+  {{modelNameCapitalized}}Page({Key? key}) : super(key: key);
+
+  @override
+  _{{modelNameCapitalized}}PageState createState() => _{{modelNameCapitalized}}PageState();
+}
+
+class _{{modelNameCapitalized}}PageState extends State<{{modelNameCapitalized}}Page> {
+
+  @override
+  void initState() {
+    super.initState();
+    
+    BlocProvider.of<{{modelNameCapitalized}}Bloc>(context).add(Get{{modelNameCapitalized}}());
+  }
+  
+  @override
+  Widget build(BuildContext context) {
+    return BlocBuilder<{{modelNameCapitalized}}Bloc, {{modelNameCapitalized}}State>(
+      builder: (context, state) {
+        if (state is {{modelNameCapitalized}}Loading) {
+          return Text('Loading');
+        } else if (state is {{modelNameCapitalized}}Failure) {
+          return Text('Failure');
+        } else if (state is {{modelNameCapitalized}}LoadSuccess) {
+          return {{modelNameCapitalized}}Loaded(
+            {{modelNameLowercase}}: state.{{modelNameLowercase}},
+          );
+        }
+
+        return Text('Error: $state');
+      },
+    );
+  }
+}
+{% endblock -%}

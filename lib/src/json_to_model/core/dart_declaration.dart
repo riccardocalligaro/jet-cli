@@ -142,6 +142,14 @@ class DartDeclaration {
     }
   }
 
+  String domainModelDeclaration() {
+    if (isNullable) {
+      return '$name: checkOptional($name, this.$name)';
+    } else {
+      return '$name: r.$name';
+    }
+  }
+
   String copyWithBodyDeclaration() {
     if (isNullable) {
       return '$name: checkOptional($name, this.$name)';

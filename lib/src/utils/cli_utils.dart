@@ -20,6 +20,10 @@ Timer loadingAnimation({
 void buildMessage(String message) => stdout.writeln('🔨 $message');
 
 String multilineInput(String question) {
+  // TODO: make this dynamic
+  // if (true) {
+  //   return stringQuestion("input singleline");
+  // }
   stdout.write('${"\t" * cli.currentLevel}❓ $question: ');
 
   final lines = [];
@@ -85,8 +89,8 @@ String plural(String featureName) {
   }
 }
 
-void finished() {
-  stdout.writeln('👌 Finished');
+void finished({Duration? duration}) {
+  stdout.writeln('🏁 Finished ${duration != null ? "in $duration" : ""}');
 }
 
 void generated(String name) {

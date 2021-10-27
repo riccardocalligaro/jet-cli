@@ -14,7 +14,7 @@ class {{ abstractRepositoryName }} {
     required this.{{pluralNameLowercase}}RemoteDatasource,
   });
 
-  Future<Either<Failure, {{returnModel}}>> get{{modelNameCapitalized}}() {
+  Future<Either<Failure, {{returnModel}}>> get{{modelNameCapitalized}}() async {
     try {
       final remote{{modelNameCapitalized}} =
           await {{modelNameLowercase}}RemoteDatasource.get{{modelNameCapitalized}}();

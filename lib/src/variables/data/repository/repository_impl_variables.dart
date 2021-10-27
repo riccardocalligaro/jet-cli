@@ -8,6 +8,8 @@ class RepositoryImplVariables {
   String? filename;
   String? returnType;
   String? imports;
+  String? repositoryNameLowercase;
+  String? usedRepository;
 
   RepositoryImplVariables({
     this.repositoryName,
@@ -15,6 +17,8 @@ class RepositoryImplVariables {
     this.filename,
     this.returnType,
     this.imports,
+    this.repositoryNameLowercase,
+    this.usedRepository,
   });
 
   Map<String, dynamic> toMap(FeatureVariables featureVariables) {
@@ -24,6 +28,8 @@ class RepositoryImplVariables {
       'filename': filename,
       'returnType': returnType,
       'imports': imports,
+      'repositoryNameLowercase': repositoryNameLowercase,
+      'usedRepository': usedRepository,
     }..addAll(featureVariables.toMap());
   }
 
