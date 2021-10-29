@@ -157,7 +157,7 @@ class FeatureCommand extends Command<int> {
       );
     }
 
-    await Process.run('cd', ['outout']);
+    await Process.run('cd', ['.\\output']);
     await Process.run('flutter', ['format', '.']);
 
     stdout.write('\n');

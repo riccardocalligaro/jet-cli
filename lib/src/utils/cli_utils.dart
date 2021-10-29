@@ -70,9 +70,13 @@ bool boolQuestion(String message, {String? prefix}) {
       (input.toLowerCase() != 'y' && input.toLowerCase() != 'n')) {
     stdout
         .write('${"\t" * cli.currentLevel}${prefix ?? "❓"} $message [y][n]: ');
+    stdin.echoMode = false;
     stdin.lineMode = false;
+
     input = utf8.decode([stdin.readByteSync()]);
     stdin.lineMode = true;
+    stdin.echoMode = true;
+
     stdout.write('\n');
   }
 
