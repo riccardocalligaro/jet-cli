@@ -19,7 +19,9 @@ class {{modelNameCapitalized}}Bloc extends Bloc<{{modelNameCapitalized}}Event, {
     on<Get{{modelNameCapitalized}}>((event, emit) async {
       emit({{modelNameCapitalized}}Loading());
 
-       final {{modelNameLowercase}}Result = await {{ repositoryNameLowercase }}.get{{modelNameCapitalized}}();
+       final {{modelNameLowercase}}Result = await {{ repositoryNameLowercase }}.get{{modelNameCapitalized}}(
+         {{blocToRepository}}
+       );
 
        {{modelNameLowercase}}Result.fold(
          (failure) {
