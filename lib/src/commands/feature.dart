@@ -18,6 +18,7 @@ import 'package:jet_cli/src/variables/data/repository/repository_impl_variables.
 import 'package:jet_cli/src/variables/domain/model/domain_model_variables.dart';
 import 'package:jet_cli/src/variables/domain/repository/repository_variables.dart';
 import 'package:jet_cli/src/variables/feature_variables.dart';
+import 'package:jet_cli/src/variables/parameter.dart';
 import 'package:jet_cli/src/variables/presentation/bloc_variables.dart';
 import 'package:recase/recase.dart';
 import 'package:universal_io/prefer_universal/io.dart';
@@ -40,6 +41,13 @@ class FeatureCommand extends Command<int> {
   Future<int> run() async {
     final stopwatch = Stopwatch()..start();
 
+    // TODO: make this dynamic
+    final List<Parameter> params = [
+      Parameter(type: 'String', name: 'name', required: true),
+      Parameter(type: 'String', name: 'surname', required: true),
+      Parameter(type: 'String', name: 'fiscalCode', required: false),
+    ];
+
     //stdout.flush();
     _validateFeatureName(argResults?.rest ?? []);
 
@@ -50,6 +58,7 @@ class FeatureCommand extends Command<int> {
     final featureName = argResults!.rest[0].camelCase;
 
     final featureVariables = FeatureVariables();
+    featureVariables.params = params;
 
     featureVariables.featureNameCapitalized = featureName.capitalized;
 

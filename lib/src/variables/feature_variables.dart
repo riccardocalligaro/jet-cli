@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+import 'package:jet_cli/src/variables/parameter.dart';
+
 class FeatureVariables {
   String? featureName;
 
@@ -25,6 +27,8 @@ class FeatureVariables {
   String? domainModelFilename;
 
   String? packageName;
+
+  List<Parameter>? params;
   FeatureVariables({
     this.featureName,
     this.singularNameForModel,
@@ -42,6 +46,7 @@ class FeatureVariables {
     this.domainModelFilename,
     this.repositoryImplFilename,
     this.packageName,
+    this.params,
   });
 
   Map<String, dynamic> toMap() {
@@ -56,7 +61,12 @@ class FeatureVariables {
       'responseSingleObject': responseSingleObject,
       'returnModel': returnModel,
       'modelNameLowercase': modelNameLowercase,
-      'modelNameCapitalized': modelNameCapitalized
+      'modelNameCapitalized': modelNameCapitalized,
+      'functionParams': functionParams,
+      'declarationParams': declarationParams,
+      'blocToRepository': blocToRepository,
+      'repositoryToDatasource': repositoryToDatasource,
+      'constParams': constParams,
     };
   }
 
@@ -75,6 +85,46 @@ class FeatureVariables {
 
   factory FeatureVariables.fromJson(String source) =>
       FeatureVariables.fromMap(json.decode(source));
+
+  String get functionParams {
+    if (params!.isEmpty) return '';
+
+    final paramsList = params
+        ?.map((p) =>
+            '${p.required ? "required " : ""}${p.type}${p.required ? "" : "?"} ${p.name},')
+        .join('');
+
+    return '{$paramsList}';
+  }
+
+  String get constParams {
+    if (params!.isEmpty) return '';
+    final paramsList = params
+        ?.map((p) => '${p.required ? "required " : ""}this.${p.name},')
+        .join('');
+    return '{$paramsList}';
+  }
+
+  String get declarationParams {
+    if (params!.isEmpty) return '';
+    final paramsList = params
+        ?.map((p) => 'final ${p.type}${p.required ? "" : "?"} ${p.name};')
+        .join('\n');
+    return '$paramsList';
+  }
+
+  String get blocToRepository {
+    if (params!.isEmpty) return '';
+    final paramsList =
+        params?.map((p) => '${p.name}: event.${p.name}').join(',');
+    return '$paramsList';
+  }
+
+  String get repositoryToDatasource {
+    if (params!.isEmpty) return '';
+    final paramsList = params?.map((p) => '${p.name}: ${p.name}').join(',');
+    return '$paramsList';
+  }
 
   String get returnModel {
     String modelName = '';

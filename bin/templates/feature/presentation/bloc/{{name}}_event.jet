@@ -4,5 +4,11 @@ part of '{{modelNameLowercase}}_bloc.dart';
 @immutable
 abstract class {{modelNameCapitalized}}Event {}
 
-class Get{{modelNameCapitalized}} extends {{modelNameCapitalized}}Event {}
+class Get{{modelNameCapitalized}} extends {{modelNameCapitalized}}Event {
+  {{declarationParams}}
+
+  Get{{modelNameCapitalized}}(
+    {{constParams}}
+  );
+}
 {% endblock -%}

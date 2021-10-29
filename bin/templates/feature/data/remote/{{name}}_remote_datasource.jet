@@ -16,7 +16,7 @@ class {{pluralName}}RemoteDatasource {
     required this.client,
   });
 
-  Future<{{'' if responseSingleObject else 'List<'}}{{remoteModel}}{{'' if responseSingleObject else '>'}}> get{{pluralName}}() async {
+  Future<{{'' if responseSingleObject else 'List<'}}{{remoteModel}}{{'' if responseSingleObject else '>'}}> get{{pluralName}}({{functionParams}}) async {
   
     final response = await client.get('{{path}}');
 
