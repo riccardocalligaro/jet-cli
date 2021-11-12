@@ -16,10 +16,10 @@ class {{modelNameCapitalized}}Bloc extends Bloc<{{modelNameCapitalized}}Event, {
   {{modelNameCapitalized}}Bloc({
     required this.{{ repositoryNameLowercase }}
   }) : super({{modelNameCapitalized}}Initial()) {
-    on<Get{{modelNameCapitalized}}>((event, emit) async {
+    on<{{actionCapitalized}}{{modelNameCapitalized}}>((event, emit) async {
       emit({{modelNameCapitalized}}Loading());
 
-       final {{modelNameLowercase}}Result = await {{ repositoryNameLowercase }}.get{{modelNameCapitalized}}(
+       final {{modelNameLowercase}}Result = await {{ repositoryNameLowercase }}.{{actionCamelCase}}{{modelNameCapitalized}}(
          {{blocToRepository}}
        );
 

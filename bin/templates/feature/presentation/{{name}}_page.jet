@@ -17,7 +17,7 @@ class _{{modelNameCapitalized}}PageState extends State<{{modelNameCapitalized}}P
   void initState() {
     super.initState();
     
-    BlocProvider.of<{{modelNameCapitalized}}Bloc>(context).add(Get{{modelNameCapitalized}}());
+    BlocProvider.of<{{modelNameCapitalized}}Bloc>(context).add({{actionCapitalized}}{{modelNameCapitalized}}());
   }
   
   @override

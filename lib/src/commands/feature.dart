@@ -43,9 +43,9 @@ class FeatureCommand extends Command<int> {
 
     // TODO: make this dynamic
     final List<Parameter> params = [
-      Parameter(type: 'String', name: 'name', required: true),
-      Parameter(type: 'String', name: 'surname', required: true),
-      Parameter(type: 'String', name: 'fiscalCode', required: false),
+      Parameter(type: 'RequestDomainModel', name: 'request', required: true),
+      // Parameter(type: 'String', name: 'surname', required: false),
+      // Parameter(type: 'String', name: 'fiscalCode', required: false),
     ];
 
     //stdout.flush();
@@ -102,6 +102,15 @@ class FeatureCommand extends Command<int> {
     RepositoryImplVariables? repositoryImplVariables;
     DomainModelVariables? domainModelVariables;
     BlocVariables? blocVariables;
+
+    if (!boolQuestion('Is action [GET]?', prefix: '\n🌐')) {
+      final action = stringQuestion('Insert action');
+      featureVariables.actionCamelCase = action.camelCase;
+      featureVariables.actionCapitalized = action.capitalized;
+    } else {
+      featureVariables.actionCamelCase = 'get';
+      featureVariables.actionCapitalized = 'Get';
+    }
 
     if (boolQuestion('Generate remote model?', prefix: '\n🌐')) {
       remoteModelVariables = RemoteModelBuilder.build(featureVariables);

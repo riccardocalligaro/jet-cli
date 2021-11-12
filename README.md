@@ -9,69 +9,59 @@ Throughout the life span of a project, when we build new features, we often need
 
 ## Commands
 
-### `$ jet g project`
+### `$ jet feature <name>`
 
-Create base project in seconds with a lot of useful stuff.
-
-
-```
-jet g project new_application
-
-> Enter a 2 letter code that will identify your app (NA for example): 
-> Enter the package name: 
-
-Project
-> ? Would you like to use all three levels (data/domain/presentation)?
-> ? Would you like to use functional programming for error handling?
-> ? Would you like to have localization?
-
-Infrastructure
-> ? Would you like to use firebase for production logging?
-
-Data layer
-> ? Would you like to have a local datasource (sqlite database)?
-> ? Would you like to have a remote datasource (dio client)?
-
-Presentation layer
-> ? Would you like to have some generic widgets?
+Create a new feature in seconds.
 
 ```
+jet feature todo
 
+❓ Is plural [Todos] correct?:  [y][n]:
+✅ Ok, singular todo, plural: todos
+❓ Has domain layer?  [y][n]:
+❓ Is response a single object? [y][n]:
 
+🌐 Is action [GET]? [y][n]:
 
-### `$ jet g feature`
+🌐 Generate remote model? [y][n]:
+❓ Insert model JSON: {
+        "userId": 1,
+        "id": 1,
+        "title": "delectus aut autem",
+        "completed": false
+}
 
+🙌 Generated output/todos/data/remote/todo_remote_model.dart
+
+🌐 Generate remote datasource? [y][n]:
+✅ Ok, generating TodosRemoteDatasource...
+        ❓ Generate response conversion? [y][n]:
+        ❓ API path: [/todos]
+
+🙌 Generated output/todos/data/remote/todos_remote_datasource.dart
+
+📁 Generate repository?  [y][n]:
+🙌 Generated output/todos/domain/model/todo_domain_model.dart
+🙌 Generated output/todos/domain/repository/todos_repository.dart
+🙌 Generated output/todos/data/repository/todos_repository_impl.dart
+
+🌊 Generate BloC?  [y][n]:
+🙌 Generated output/todos/presentation/bloc/todos_bloc.dart
+🙌 Generated output/todos/presentation/bloc/todos_event.dart
+🙌 Generated output/todos/presentation/bloc/todos_state.dart
+
+🌇 Generate page presentation? [y][n]:
+🙌 Generated output/todos/presentation/todos_loaded.dart
+🙌 Generated output/todos/presentation/todos_page.dart
+
+📦 Generate container? [y][n]:
+🙌 Generated output/todos/todos_container.dart
+```
+
+### `$ jet project <name>`
+
+Create a project in seconds.
 
 ```
-jet g feature feature_name
-
-> ? Does this feature have a data layer?
-    > ? Does this feature have a remote datasource?
-        > Enter the name of the object model:
-        > ? Is the return type a list?
-        > Enter the object JSON response: 
-        > Enter the api call path:
-        > ? Do you want the call in the repository?
-
-    > ? Does this feature have a local datasource?
-        > Enter the name of the object model:
-        > ? Do you want the call in the repository?
-            > ? Stream or future?
-        
-> ? Does this feature have a domain layer?
-    > ? Do you want to create an object with the same charateristichs as the remote one?
-    > ? Do you want Use Cases?
-
-> ? Does this feature have a presentation layer?
-    > ? Do you want to generate a Bloc for the remote datasource?
-        > Enter the bloc name:
-    > ? Do you want to generate a Bloc for the local datasource?
-        > Enter the bloc name:
-
-    > Do you want to generate a page with the bloc consumer?
-
-[1] Barcode scanner
-[2] Calendar
-...
-> ? Would you like to implement any of these features?
+TODO
 ```

@@ -4,7 +4,7 @@ import 'package:dartz/dartz.dart';
 {{imports}}
 
 mixin {{ abstractRepositoryName }} {
-  Future<Either<Failure, {{returnModel}}>> get{{modelNameCapitalized}}({{functionParams}});
+  Future<Either<Failure, {{returnModel}}>> {{actionCamelCase}}{{modelNameCapitalized}}({{functionParams}});
 }
 
 {% endblock -%}

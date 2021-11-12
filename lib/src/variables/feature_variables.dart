@@ -28,6 +28,9 @@ class FeatureVariables {
 
   String? packageName;
 
+  String? actionCapitalized;
+  String? actionCamelCase;
+
   List<Parameter>? params;
   FeatureVariables({
     this.featureName,
@@ -47,6 +50,8 @@ class FeatureVariables {
     this.repositoryImplFilename,
     this.packageName,
     this.params,
+    this.actionCapitalized,
+    this.actionCamelCase,
   });
 
   Map<String, dynamic> toMap() {
@@ -67,6 +72,8 @@ class FeatureVariables {
       'blocToRepository': blocToRepository,
       'repositoryToDatasource': repositoryToDatasource,
       'constParams': constParams,
+      'actionCapitalized': actionCapitalized,
+      'actionCamelCase': actionCamelCase,
     };
   }
 
